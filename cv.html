@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athlete Profile Builder | ProKids Academy</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #0e2f56;
+            --primary-dark: #07192e;
+            --accent: #cfa746;
+            --bg-cream: #fdfbf7;
+            --white: #ffffff;
+            --text-dark: #1a1a1a;
+            --error: #ff4757; /* Culoare pentru eroare */
+            --radius-md: 20px;
+            --shadow-premium: 0 30px 60px rgba(14, 47, 86, 0.12);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg-cream); color: var(--text-dark); line-height: 1.6; }
+        
+        header { position: fixed; width: 100%; top: 0; z-index: 1000; padding: 15px 0; background: rgba(253, 251, 247, 0.85); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(14, 47, 86, 0.05); }
+        .nav-flex { max-width: 1400px; margin: 0 auto; padding: 0 25px; display: flex; justify-content: space-between; align-items: center; }
+        .logo-box { display: flex; align-items: center; gap: 12px; font-weight: 900; color: var(--primary); text-decoration: none; font-size: 1.6rem; }
+        .logo-box img { height: 50px; }
+
+        .cv-builder-section { padding: 160px 0 100px; min-height: 100vh; }
+        .container-cv { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 350px 1fr; gap: 40px; }
+
+        .cv-sidebar { background: var(--primary-dark); border-radius: 30px; padding: 50px 40px; color: white; height: fit-content; position: sticky; top: 120px; }
+        .cv-sidebar h2 { font-family: 'Montserrat'; color: var(--accent); margin-bottom: 30px; }
+        
+        .progress-list { list-style: none; }
+        .step-item { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; opacity: 0.4; transition: 0.3s; }
+        .step-item.active { opacity: 1; transform: translateX(10px); }
+        .step-number { width: 35px; height: 35px; border: 2px solid var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; }
+        .step-item.active .step-number { background: var(--accent); color: var(--primary-dark); }
+        
+        .cv-tip { margin-top: 50px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.85rem; color: rgba(255,255,255,0.6); }
+
+        .cv-form-box { background: white; border-radius: 30px; padding: 60px; box-shadow: var(--shadow-premium); }
+        .form-step { display: none; animation: fadeIn 0.5s ease forwards; }
+        .form-step.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .step-title { font-family: 'Montserrat'; font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
+        .step-desc { color: #888; margin-bottom: 40px; }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+        .input-group.full { grid-column: 1 / -1; }
+        
+        label { font-weight: 700; font-size: 0.8rem; text-transform: uppercase; color: var(--primary); letter-spacing: 1px; }
+        input, select, textarea { padding: 15px 20px; border-radius: 12px; border: 2px solid #f0f0f0; font-family: 'Poppins'; font-size: 1rem; transition: 0.3s; outline: none; }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent); background: #fffcf5; }
+
+        /* CLASA PENTRU EROARE */
+        input.error, select.error, textarea.error { border-color: var(--error) !important; background-color: #fff5f5 !important; }
+
+        .upload-area { border: 2px dashed #ddd; border-radius: 15px; padding: 40px; text-align: center; cursor: pointer; transition: 0.3s; }
+        .upload-area:hover { border-color: var(--accent); background: #fdfbf7; }
+        .upload-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+
+        .form-nav { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 30px; border-top: 1px solid #f0f0f0; }
+        .btn-prev { background: #eee; color: var(--primary); border: none; padding: 15px 35px; border-radius: 50px; font-weight: 700; cursor: pointer; }
+        .btn-next { background: var(--primary); color: white; border: none; padding: 15px 45px; border-radius: 50px; font-weight: 800; cursor: pointer; box-shadow: 0 10px 20px rgba(14,47,86,0.2); }
+        .btn-next:hover { background: var(--accent); transform: translateY(-3px); }
+
+        footer { background: var(--primary-dark); color: white; padding: 80px 0 40px; }
+        .footer-grid { max-width: 1400px; margin: 0 auto; padding: 0 25px; display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 60px; }
+
+        @media (max-width: 992px) {
+            .container-cv { grid-template-columns: 1fr; }
+            .cv-sidebar { position: static; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-flex">
+            <a href="index.html" class="logo-box">
+                <img src="logo.png" alt="ProKids">
+                <span>PROKIDS ACADEMY</span>
+            </a>
+            <nav>
+                <a href="scouting.html" style="text-decoration:none; color:var(--primary); font-weight:700;">ÎNAPOI LA SCOUTING</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="cv-builder-section">
+        <div class="container-cv">
+            
+            <aside class="cv-sidebar">
+                <h2>Cariera Ta</h2>
+                <div class="progress-list">
+                    <div class="step-item active" id="s1">
+                        <div class="step-number">1</div>
+                        <div><strong>Profilul</strong><br><small>Date personale</small></div>
+                    </div>
+                    <div class="step-item" id="s2">
+                        <div class="step-number">2</div>
+                        <div><strong>Atribute</strong><br><small>Fizic & Tehnic</small></div>
+                    </div>
+                    <div class="step-item" id="s3">
+                        <div class="step-number">3</div>
+                        <div><strong>Media</strong><br><small>Video & Foto</small></div>
+                    </div>
+                </div>
+                <div class="cv-tip">
+                    <p>💡 <strong>Sfat:</strong> Scouterii petrec în medie 30 de secunde pe un profil. Fii cât mai precis cu datele tale.</p>
+                </div>
+            </aside>
+
+            <div class="cv-form-box">
+                <form id="cv-wizard">
+                    
+                    <div class="form-step active" data-step="1">
+                        <h1 class="step-title">Date de Bază</h1>
+                        <p class="step-desc">Începe prin a ne spune cine ești și ce sport practici.</p>
+                        
+                        <div class="form-grid">
+                            <div class="input-group">
+                                <label>Nume Complet</label>
+                                <input type="text" placeholder="Ex: Andrei Ionescu" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Data Nașterii</label>
+                                <input type="date" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Sport Principal</label>
+                                <select required>
+                                    <option value="">Alege Sport...</option>
+                                    <option value="Fotbal">Fotbal</option>
+                                    <option value="Baschet">Baschet</option>
+                                    <option value="Handbal">Handbal</option>
+                                    <option value="Tenis">Tenis</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Poziție Preferată</label>
+                                <input type="text" placeholder="Ex: Atacant" required>
+                            </div>
+                            <div class="input-group full">
+                                <label>Echipa Actuală</label>
+                                <input type="text" placeholder="Ex: ProKids U17" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="2">
+                        <h1 class="step-title">Fișa Tehnică</h1>
+                        <p class="step-desc">Scouterii au nevoie de cifre exacte pentru evaluare.</p>
+                        
+                        <div class="form-grid">
+                            <div class="input-group">
+                                <label>Înălțime (cm)</label>
+                                <input type="number" placeholder="Ex: 182" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Greutate (kg)</label>
+                                <input type="number" placeholder="Ex: 75" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Picior/Mână de bază</label>
+                                <select required>
+                                    <option value="Dreptul">Dreptul</option>
+                                    <option value="Stângul">Stângul</option>
+                                    <option value="Ambele">Ambele</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Viteză Top</label>
+                                <input type="text" placeholder="Ex: 32 km/h" required>
+                            </div>
+                            <div class="input-group full">
+                                <label>Realizări Principale</label>
+                                <textarea rows="4" placeholder="Ex: Golgeter turneu..." required></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="3">
+                        <h1 class="step-title">Proba Video</h1>
+                        <p class="step-desc">O imagine face cât o mie de cuvinte.</p>
+                        
+                        <div class="input-group full">
+                            <label>Link Video Highlights</label>
+                            <input type="url" placeholder="https://www.youtube.com/..." required>
+                        </div>
+                        
+                        <div class="input-group full">
+                            <label>Fotografie de Profil</label>
+                            <div class="upload-area">
+                                <span class="upload-icon">📸</span>
+                                <strong>Încarcă Poză</strong><br>
+                                <small>Obligatoriu pentru validare</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-nav">
+                        <button type="button" class="btn-prev" id="prevBtn" style="visibility: hidden;">ÎNAPOI</button>
+                        <button type="button" class="btn-next" id="nextBtn">CONTINUĂ</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const steps = document.querySelectorAll('.form-step');
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const sideSteps = document.querySelectorAll('.step-item');
+        let currentStep = 0;
+
+        // FUNCTIA DE VALIDARE
+        function validateStep() {
+            const activeStep = steps[currentStep];
+            const inputs = activeStep.querySelectorAll('input, select, textarea');
+            let allValid = true;
+
+            inputs.forEach(input => {
+                // Dacă e obligatoriu și e gol
+                if (input.hasAttribute('required') && !input.value.trim()) {
+                    input.classList.add('error');
+                    allValid = false;
+                } else {
+                    input.classList.remove('error');
+                }
+            });
+
+            return allValid;
+        }
+
+        nextBtn.addEventListener('click', () => {
+            // Verificăm validarea înainte de a trece la pasul următor
+            if (!validateStep()) {
+                return; // Oprim funcția dacă nu e totul completat
+            }
+
+            if (currentStep < steps.length - 1) {
+                steps[currentStep].classList.remove('active');
+                sideSteps[currentStep].classList.remove('active');
+                
+                currentStep++;
+                
+                steps[currentStep].classList.add('active');
+                sideSteps[currentStep].classList.add('active');
+                
+                updateButtons();
+            } else {
+                alert("PROFIL TRIMIS! Vei fi contactat în cel mai scurt timp de un antrenor ProKids.");
+                window.location.href = 'scouting.html';
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 0) {
+                steps[currentStep].classList.remove('active');
+                sideSteps[currentStep].classList.remove('active');
+                
+                currentStep--;
+                
+                steps[currentStep].classList.add('active');
+                sideSteps[currentStep].classList.add('active');
+                
+                updateButtons();
+            }
+        });
+
+        function updateButtons() {
+            prevBtn.style.visibility = (currentStep === 0) ? 'hidden' : 'visible';
+            nextBtn.innerText = (currentStep === steps.length - 1) ? 'FINALIZEAZĂ PROFILUL' : 'CONTINUĂ';
+        }
+
+        // Eliminăm clasa de eroare când userul începe să scrie
+        document.querySelectorAll('input, select, textarea').forEach(el => {
+            el.addEventListener('input', () => {
+                if (el.value.trim() !== "") {
+                    el.classList.remove('error');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

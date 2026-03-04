@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarife & Pachete | ProKids Academy Ploiești</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0e2f56;
+            --primary-dark: #07192e;
+            --accent: #cfa746;
+            --accent-light: #e6bc5a;
+            --bg-cream: #fdfbf7;
+            --white: #ffffff;
+            --text-dark: #1a1a1a;
+            --text-muted: #555555;
+            --radius-md: 25px;
+            --radius-lg: 50px;
+            --shadow-premium: 0 30px 60px rgba(14, 47, 86, 0.12);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* RESET & BASE */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: var(--bg-cream); 
+            color: var(--text-dark);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .texture-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.04; pointer-events: none;
+        }
+
+        .grid-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background-image: radial-gradient(circle at 2px 2px, rgba(14, 47, 86, 0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+
+        .container { max-width: 1350px; margin: 0 auto; padding: 0 25px; }
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; }
+        a { text-decoration: none; transition: var(--transition); }
+
+        /* --- HEADER ORIGINAL --- */
+        header {
+            position: fixed; width: 100%; top: 0; z-index: 1000;
+            padding: 15px 0; background: rgba(253, 251, 247, 0.85);
+            backdrop-filter: blur(15px); border-bottom: 1px solid rgba(14, 47, 86, 0.05);
+        }
+        .nav-flex { display: flex; justify-content: space-between; align-items: center; }
+        .logo-box { display: flex; align-items: center; gap: 12px; font-weight: 900; color: var(--primary); font-size: 1.6rem; letter-spacing: -1px; }
+        .logo-box img { height: 55px; }
+        .nav-menu { display: flex; align-items: center; gap: 35px; }
+        .nav-menu a { font-weight: 600; color: var(--primary); font-size: 0.95rem; }
+        .nav-menu a:hover { color: var(--accent); }
+        .btn-cta { background: var(--primary); color: white !important; padding: 12px 30px; border-radius: 50px; font-weight: 700; box-shadow: 0 10px 20px rgba(14, 47, 86, 0.15); display: inline-block; }
+        .btn-cta:hover { background: var(--accent); transform: translateY(-3px); }
+
+        /* --- HERO & CONTENT --- */
+        .hero-prices { padding: 180px 0 60px; text-align: center; position: relative; }
+        .hero-prices h1 { font-size: 4rem; color: var(--primary); margin-bottom: 20px; letter-spacing: -2px; }
+
+        .age-selector { display: flex; justify-content: center; gap: 12px; margin-bottom: 50px; flex-wrap: wrap; }
+        .age-btn {
+            padding: 12px 25px; border-radius: 50px; border: 2px solid rgba(14, 47, 86, 0.1);
+            background: white; cursor: pointer; font-weight: 700; color: var(--primary);
+            transition: var(--transition); font-size: 0.9rem;
+        }
+        .age-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 10px 25px rgba(14, 47, 86, 0.2); }
+
+        /* ARANJARE CARDURI (3 SUS, 2 JOS) */
+        .pricing-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 30px; 
+            margin-bottom: 30px; 
+        }
+        .pricing-grid-secondary {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 900px;
+            margin: 0 auto 100px auto;
+        }
+
+        .price-card {
+            background: white; border-radius: var(--radius-md); padding: 45px 35px;
+            text-align: center; position: relative; transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.03); display: flex; flex-direction: column;
+        }
+        .price-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-premium); }
+        .price-card h3 { font-size: 1.4rem; color: var(--primary); margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
+
+        .amount { 
+            display: flex; align-items: baseline; justify-content: center; gap: 8px;
+            font-family: 'Montserrat', sans-serif; font-size: 3.2rem; font-weight: 900; 
+            color: var(--accent); line-height: 1; margin-bottom: 30px; letter-spacing: -1px;
+        }
+        .amount sub { font-size: 0.95rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; vertical-align: baseline; }
+
+        .feature-list { text-align: left; margin-bottom: 35px; flex-grow: 1; list-style: none; }
+        .feature-list li { margin-bottom: 12px; display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: var(--text-muted); }
+        .feature-list li::before { content: '✔'; color: var(--accent); font-weight: 900; font-size: 0.8rem; }
+
+        .btn-price {
+            background: var(--bg-cream); color: var(--primary); padding: 16px;
+            border-radius: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; font-size: 0.85rem;
+        }
+        .price-card:hover .btn-price { background: var(--primary); color: white; }
+
+        /* --- FOOTER ORIGINAL --- */
+        footer { background: var(--primary-dark); color: white; padding: 100px 0 40px; margin-top: 150px; }
+        .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1.2fr; gap: 60px; margin-bottom: 80px; }
+        .footer-col h4 { color: var(--accent); text-transform: uppercase; letter-spacing: 3px; font-size: 0.85rem; margin-bottom: 35px; font-weight: 800; }
+        .footer-links li { list-style: none; margin-bottom: 18px; }
+        .footer-links a { color: rgba(255,255,255,0.6); font-size: 0.95rem; }
+        .footer-links a:hover { color: var(--accent); padding-left: 8px; }
+        .contact-box p { margin-bottom: 15px; display: flex; align-items: flex-start; gap: 10px; opacity: 0.8; }
+        .social-links { display: flex; gap: 15px; margin-top: 30px; }
+        .social-links a { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: white; }
+        .social-links a:hover { background: var(--accent); transform: translateY(-5px); }
+
+        .reveal { opacity: 0; transform: translateY(25px); transition: 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 6px; z-index: 1001; }
+        .hamburger span { width: 30px; height: 3px; background: var(--primary); border-radius: 2px; transition: 0.3s; }
+
+        @media (max-width: 992px) {
+            .hamburger { display: flex; }
+            .nav-menu {
+                position: fixed; top: 0; right: -100%; width: 80%; height: 100vh;
+                background: white; flex-direction: column; justify-content: center;
+                align-items: center; gap: 30px !important; box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+                transition: 0.4s; padding: 40px;
+            }
+            .nav-menu.active { right: 0; }
+            .pricing-grid, .pricing-grid-secondary { grid-template-columns: 1fr; max-width: 100%; }
+            .footer-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="texture-overlay"></div>
+
+    <header>
+        <div class="container nav-flex">
+            <a href="index.html" class="logo-box">
+                <img src="logo.png" alt="ProKids Logo">
+                <span>PROKIDS ACADEMY</span>
+            </a>
+            
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <nav class="nav-menu" id="nav-menu">
+                <a href="index.html">Acasă</a>
+                <a href="preturi.html">Tarife</a>
+                <a href="echipa.html">Echipa</a>
+                <a href="contact.html" class="btn-cta">Înscrieri 2026</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero-prices">
+            <div class="grid-bg"></div>
+            <div class="reveal">
+                <span style="color: var(--accent); font-weight: 800; letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem;">Investiție în Viitor</span>
+                <h1>Alege Pachetul Tău</h1>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Tarife transparente extrase din lista oficială.</p>
+            </div>
+
+            <div class="age-selector reveal">
+                <button class="age-btn active" onclick="updatePrices('4-6', this)">4 - 6 Ani</button>
+                <button class="age-btn" onclick="updatePrices('7-10', this)">7 - 10 Ani</button>
+                <button class="age-btn" onclick="updatePrices('11-14', this)">11 - 14 Ani</button>
+                <button class="age-btn" onclick="updatePrices('15-18', this)">15 - 18 Ani</button>
+            </div>
+
+            <div class="pricing-grid reveal">
+                <div class="price-card">
+                    <h3>Canto</h3>
+                    <div class="amount"><span id="price-canto">198</span><sub>Lei</sub></div>
+                    <ul class="feature-list">
+                        <li>Ședințe individuale 50 min </li>
+                        <li>Tehnică vocală și respirație </li>
+                        <li>Pregătire concursuri </li>
+                    </ul>
+                    <a href="contact.html" class="btn-price">Rezervă Loc</a>
+                </div>
+
+                <div class="price-card" style="border: 2px solid var(--accent);">
+                    <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; padding: 5px 20px; border-radius: 5px; font-size: 0.7rem; font-weight: 900; letter-spacing: 1px;">POPULAR</div>
+                    <h3>Dans</h3>
+                    <div class="amount"><span id="price-dans">169</span><sub>Lei</sub></div>
+                    <ul class="feature-list">
+                        <li>2 ședințe pe săptămână </li>
+                        <li>Coregrafie & Show </li>
+                        <li>Echipament inclus </li>
+                    </ul>
+                    <a href="contact.html" class="btn-price" style="background: var(--primary); color: white;">Înscrie-te</a>
+                </div>
+
+                <div class="price-card">
+                    <h3>Arte Vizuale</h3>
+                    <div class="amount"><span id="price-arte">198</span><sub>Lei</sub></div>
+                    <ul class="feature-list">
+                        <li>Materiale premium incluse </li>
+                        <li>Pictură & Modelaj </li>
+                        <li>Expoziții lunare </li>
+                    </ul>
+                    <a href="contact.html" class="btn-price">Rezervă Loc</a>
+                </div>
+            </div>
+
+            <div class="pricing-grid-secondary reveal">
+                <div class="price-card">
+                    <h3>Arte și Spectacol</h3>
+                    <div class="amount"><span id="price-spectacol">182</span><sub>Lei</sub></div>
+                    <ul class="feature-list">
+                        <li>Actorie & Prezență scenică</li>
+                        <li>Dicție și mișcare</li>
+                        <li>Spectacole trimestriale</li>
+                    </ul>
+                    <a href="contact.html" class="btn-price">Rezervă Loc</a>
+                </div>
+
+                <div class="price-card">
+                    <h3>Cultură Generală</h3>
+                    <div class="amount"><span id="price-cultura">182</span><sub>Lei</sub></div>
+                    <ul class="feature-list">
+                        <li>Ateliere interactive</li>
+                        <li>Dezvoltare cognitivă</li>
+                        <li>Curiozități și știință</li>
+                    </ul>
+                    <a href="contact.html" class="btn-price">Rezervă Loc</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container footer-grid">
+            <div class="footer-col">
+                <div class="logo-box" style="color: white; margin-bottom: 30px;">
+                    <img src="logo.png" alt="ProKids" style="filter: brightness(0) invert(1);">
+                    <span style="color: white;">PROKIDS</span>
+                </div>
+                <p style="opacity: 0.6;">Excelență în educație extrașcolară și arte în Ploiești. </p>
+                <div class="social-links">
+                    <a href="#">f</a><a href="#">ig</a><a href="#">tk</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Navigare Rapidă</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Acasă</a></li>
+                    <li><a href="preturi.html">Tarife</a></li>
+                    <li><a href="echipa.html">Echipa</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Programe</h4>
+                <ul class="footer-links">
+                    <li><a href="#">After School</a></li>
+                    <li><a href="#">Canto</a></li>
+                    <li><a href="#">Dans</a></li>
+                    <li><a href="#">Pian</a></li>
+                </ul>
+            </div>
+            <div class="footer-col contact-box">
+                <h4>Contact Direct</h4>
+                <p>📍 Strada Rudului 24, Ploiești </p>
+                <p>📞 0244 542 341 </p>
+                <p>✉️ prokidsacademy25@gmail.com </p>
+            </div>
+        </div>
+        <div class="container" style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 40px; text-align: center; opacity: 0.4;">
+            <p>© 2026 ProKids Academy. Toate drepturile rezervate. </p>
+        </div>
+    </footer>
+
+    <script>
+        // Date extrase din "LISTA DE PRETURI.docx"
+        const priceData = {
+            '4-6':   { canto: "198", dans: "169", arte: "198", spectacol: "182", cultura: "182" },
+            '7-10':  { canto: "220", dans: "190", arte: "220", spectacol: "205", cultura: "205" },
+            '11-14': { canto: "257", dans: "241", arte: "257", spectacol: "225", cultura: "225" },
+            '15-18': { canto: "286", dans: "250", arte: "286", spectacol: "260", cultura: "260" }
+        };
+
+        function updatePrices(age, btn) {
+            document.querySelectorAll('.age-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            document.getElementById('price-canto').innerText = priceData[age].canto;
+            document.getElementById('price-dans').innerText = priceData[age].dans;
+            document.getElementById('price-arte').innerText = priceData[age].arte;
+            document.getElementById('price-spectacol').innerText = priceData[age].spectacol;
+            document.getElementById('price-cultura').innerText = priceData[age].cultura;
+        }
+
+        const ham = document.getElementById('hamburger');
+        const menu = document.getElementById('nav-menu');
+        ham.addEventListener('click', () => {
+            menu.classList.toggle('active');
+            ham.classList.toggle('active');
+        });
+
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    </script>
+</body>
+</html>

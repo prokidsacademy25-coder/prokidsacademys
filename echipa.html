@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echipa Noastră | ProKids Academy Ploiești</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0e2f56;
+            --primary-dark: #07192e;
+            --accent: #cfa746;
+            --accent-light: #e6bc5a;
+            --bg-cream: #fdfbf7;
+            --white: #ffffff;
+            --text-dark: #1a1a1a;
+            --text-muted: #555555;
+            --radius-md: 25px;
+            --radius-lg: 50px;
+            --shadow-premium: 0 30px 60px rgba(14, 47, 86, 0.12);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* RESET & BASE */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: var(--bg-cream); 
+            color: var(--text-dark);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* TEXTURES */
+        .texture-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.04; pointer-events: none;
+        }
+
+        .grid-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background-image: radial-gradient(circle at 2px 2px, rgba(14, 47, 86, 0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+
+        .container { max-width: 1350px; margin: 0 auto; padding: 0 25px; }
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; letter-spacing: -1px; }
+        a { text-decoration: none; transition: var(--transition); }
+
+        /* NAVIGATION */
+        header {
+            position: fixed; width: 100%; top: 0; z-index: 1000;
+            padding: 15px 0; background: rgba(253, 251, 247, 0.85);
+            backdrop-filter: blur(15px); border-bottom: 1px solid rgba(14, 47, 86, 0.05);
+        }
+        .nav-flex { display: flex; justify-content: space-between; align-items: center; }
+        .logo-box { display: flex; align-items: center; gap: 12px; font-weight: 900; color: var(--primary); font-size: 1.6rem; z-index: 1001; }
+        .logo-box img { height: 55px; }
+        
+        /* Menu Toggle (Hidden on Desktop) */
+        .menu-toggle { display: none; flex-direction: column; gap: 6px; cursor: pointer; z-index: 1001; }
+        .menu-toggle span { width: 30px; height: 3px; background: var(--primary); border-radius: 3px; transition: 0.3s; }
+
+        .nav-menu { display: flex; align-items: center; gap: 35px; }
+        .nav-menu a { font-weight: 600; color: var(--primary); font-size: 0.95rem; }
+        .nav-menu a:hover { color: var(--accent); }
+        .btn-cta { background: var(--primary); color: white !important; padding: 12px 30px; border-radius: 50px; font-weight: 700; }
+
+        /* HERO TEAM */
+        .hero-team { padding: 180px 0 100px; text-align: center; position: relative; }
+        .hero-team h1 { font-size: 5rem; color: var(--primary); margin-bottom: 20px; line-height: 1; }
+        .hero-team p { font-size: 1.3rem; color: var(--text-muted); max-width: 800px; margin: 0 auto; }
+
+        /* FOUNDER SECTION */
+        .founder-section { padding: 100px 0; background: white; border-radius: var(--radius-lg); margin-bottom: 100px; box-shadow: var(--shadow-premium); }
+        .founder-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 80px; align-items: center; }
+        .founder-img { position: relative; }
+        .founder-img img { width: 100%; border-radius: var(--radius-md); /* Am scos filter: grayscale */transition: 0.5s; }
+        .founder-img:hover img { filter: grayscale(0%); }
+        .founder-img::after { content: ''; position: absolute; top: 20px; left: -20px; width: 100%; height: 100%; border: 2px solid var(--accent); border-radius: var(--radius-md); z-index: -1; }
+        .founder-text h2 { font-size: 3rem; color: var(--primary); margin-bottom: 10px; }
+        .founder-tag { color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 30px; }
+        .founder-quote { font-size: 1.4rem; font-style: italic; color: var(--primary); border-left: 5px solid var(--accent); padding-left: 30px; margin: 30px 0; }
+
+        /* MENTORS GRID */
+        .team-category { margin-bottom: 40px; color: var(--accent); font-weight: 800; letter-spacing: 4px; text-transform: uppercase; font-size: 0.9rem; text-align: center; display: block; }
+        .mentors-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-bottom: 120px; }
+        .member-card { background: transparent; transition: var(--transition); text-align: center; }
+        .member-img-box { width: 100%; aspect-ratio: 4/5; border-radius: var(--radius-md); overflow: hidden; margin-bottom: 25px; position: relative; }
+        .member-img-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; }
+        .member-card:hover img { transform: scale(1.1); }
+        .member-card h3 { font-size: 1.8rem; color: var(--primary); margin-bottom: 5px; }
+        .member-card p { color: var(--text-muted); font-weight: 500; font-size: 0.95rem; }
+
+        /* VALUES SECTION */
+        .team-values { background: var(--primary-dark); padding: 120px 0; color: white; border-radius: var(--radius-lg); position: relative; overflow: hidden; }
+        .values-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; margin-top: 60px; }
+        .value-item { text-align: center; padding: 30px; background: rgba(255,255,255,0.03); border-radius: 20px; }
+        .value-item i { font-size: 2.5rem; color: var(--accent); display: block; margin-bottom: 20px; }
+
+        /* FOOTER */
+        footer { background: var(--primary-dark); color: white; padding: 100px 0 40px; margin-top: 150px; }
+        .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1.2fr; gap: 60px; margin-bottom: 80px; }
+        .footer-col h4 { color: var(--accent); text-transform: uppercase; letter-spacing: 3px; font-size: 0.85rem; margin-bottom: 35px; font-weight: 800; }
+        .footer-links li { list-style: none; margin-bottom: 18px; }
+        .footer-links a { color: rgba(255,255,255,0.6); font-size: 0.95rem; }
+        .footer-links a:hover { color: var(--accent); padding-left: 8px; }
+        .contact-box p { margin-bottom: 15px; display: flex; align-items: flex-start; gap: 10px; opacity: 0.8; }
+        .social-links { display: flex; gap: 15px; margin-top: 30px; }
+        .social-links a { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; }
+        .social-links a:hover { background: var(--accent); transform: translateY(-5px); }
+
+        /* REVEAL */
+        .reveal { opacity: 0; transform: translateY(40px); transition: 1s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* --- RESPONSIVE OPTIMIZATIONS (Only for Tablet & Mobile) --- */
+        
+        @media (max-width: 1024px) {
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+        }
+
+        @media (max-width: 900px) {
+            .founder-grid { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+            .founder-img { max-width: 400px; margin: 0 auto; }
+            .founder-img::after { left: 15px; }
+            .founder-quote { border-left: none; border-top: 5px solid var(--accent); padding-left: 0; padding-top: 20px; }
+            .mentors-grid { grid-template-columns: 1fr 1fr; }
+            .values-grid { grid-template-columns: 1fr 1fr; }
+            .hero-team h1 { font-size: 3.5rem; }
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 10px 0; }
+            .menu-toggle { display: flex; }
+            .nav-menu {
+                position: fixed; top: 0; right: -100%; width: 280px; height: 100vh;
+                background: var(--bg-cream); flex-direction: column; justify-content: center;
+                transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+            }
+            .nav-menu.active { right: 0; }
+            .nav-menu a { font-size: 1.1rem; }
+            
+            .hero-team { padding: 140px 0 60px; }
+            .hero-team h1 { font-size: 2.8rem; }
+            .hero-team p { font-size: 1.1rem; }
+            
+            .founder-section { padding: 60px 20px; margin-bottom: 60px; }
+            .footer-grid { grid-template-columns: 1fr; text-align: center; }
+            .footer-col { display: flex; flex-direction: column; align-items: center; }
+            .contact-box p { justify-content: center; }
+            .social-links { justify-content: center; }
+        }
+
+        @media (max-width: 480px) {
+            .hero-team h1 { font-size: 2.2rem; }
+            .mentors-grid { grid-template-columns: 1fr; }
+            .values-grid { grid-template-columns: 1fr; }
+            .member-img-box { aspect-ratio: 1/1; }
+            .logo-box { font-size: 1.2rem; }
+            .logo-box img { height: 45px; }
+            .btn-cta { padding: 10px 25px !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="texture-overlay"></div>
+
+    <header>
+        <div class="container nav-flex">
+            <a href="index.html" class="logo-box">
+                <img src="logo.png" alt="ProKids">
+                <span>PROKIDS ACADEMY</span>
+            </a>
+            
+            <div class="menu-toggle" id="mobile-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <nav class="nav-menu" id="nav-list">
+                <a href="index.html">Acasă</a>
+                <a href="preturi.html">Tarife</a>
+                <a href="echipa.html" style="color: var(--accent);">Echipa</a>
+                <a href="contact.html" class="btn-cta">Înscrieri 2026</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        
+        <section class="container hero-team">
+            <div class="grid-bg"></div>
+            <div class="reveal">
+                <span class="founder-tag" style="text-align: center;">Oameni dedicați excelenței</span>
+                <h1>Echipa care inspiră <br><span>viitoarea generație</span></h1>
+                <p>Am adunat în Ploiești o comunitate de mentori, profesori și artiști care nu doar predau, ci modelează caractere. Fiecare membru al echipei ProKids este selectat pentru empatie, experiență și pasiune.</p>
+            </div>
+        </section>
+
+        <section class="container reveal">
+            <div class="founder-section">
+                <div class="container founder-grid">
+                    <div class="founder-img">
+                        <img src="alexia.jpeg" alt="Founder ProKids">
+                    </div>
+                    <div class="founder-text">
+                        <span class="founder-tag">Fondator & Director Viziune</span>
+                        <h2>Grigore Alexia Nicole</h2>
+                        <p>Elevă la un liceu de prestigiu din Ploiești, Alexia a fondat ProKids Academy din dorința de a crea o alternativă modernă pentru educația extrașcolară. Reprezentând noua generație, ea aduce o perspectivă proaspătă asupra modului în care copiii ar trebui încurajați să învețe: prin pasiune și explorare, nu prin presiunea notelor.</p>
+                        <div class="founder-quote">
+                          "Educația nu este umplerea unei găleți, ci aprinderea unui foc. La ProKids, vrem să fim scânteia care ajută copiii să-și descopere propriul drum."
+                        </div>
+                        <p style="color: var(--text-muted);">Pasionată de psihologia educațională și management, Alexia coordonează echipa ProKids cu scopul de a transforma academia într-un loc unde creativitatea și performanța merg mână în mână, demonstrând că viziunea și dorința de a schimba ceva nu au vârstă.</p>   
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <span class="team-category reveal">Directori Afterschool</span>
+            
+            <div class="mentors-grid">
+                <div class="member-card reveal">
+                    <div class="member-img-box"><img src="raisa.jpeg" alt="Mentor"></div>
+                    <h3>Popescu Raisa</h3>
+                    <p>Director Adjunct</p>
+                </div>
+                <div class="member-card reveal">
+                    <div class="member-img-box"><img src="alexiastefan.jpeg" alt="Mentor"></div>
+                    <h3>Stefan Alexia</h3>
+                    <p>Director Economic</p>
+                </div>
+                <div class="member-card reveal">
+                    <div class="member-img-box"><img src="https://images.unsplash.com/photo-1580894732444-8ecded7900cd?auto=format&fit=crop&w=600" alt="Mentor"></div>
+                    <h3>Oprea Luca</h3>
+                    <p>Director Comercial</p>
+                </div>
+                <div class="member-card reveal">
+                    <div class="member-img-box"><img src="teodora.jpeg" alt="Mentor"></div>
+                    <h3>Dutu Teodora</h3>
+                    <p>Director Resurse Umane</p>
+                </div>
+                <div class="member-card reveal">
+                    <div class="member-img-box"><img src="badulescu.jpeg" alt="Mentor"></div>
+                    <h3>Badulescu Andrei</h3>
+                    <p>Director IT</p>
+                </div>
+                <div class="member-card reveal">
+                    <div class="member-img-box"><img src="jasmine.jpeg" alt="Mentor"></div>
+                    <h3>Bombina Jasmine</h3>
+                    <p>Director Marketing</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <span class="team-category reveal">Departament Arte & Performanță</span>
+            
+            <div class="mentors-grid">
+                <div class="member-card reveal">
+                    <div class="member-img-box"><img src="cristina.jpeg" alt="Mentor"></div>
+                    <h3>Dumitru Cristina</h3>
+                    <p>Financiar Contabil</p>
+                </div>
+                <div class="member-card reveal">
+                    <div class="member-img-box"><img src="adriana.jpeg" alt="Mentor"></div>
+                    <h3>Neagu Adriana</h3>
+                    <p>Inspector de Personal</p>
+                </div>
+                <div class="member-card reveal">
+                    <div class="member-img-box"><img src="cristian.jpeg" alt="Mentor"></div>
+                    <h3>Stancu Cristian</h3>
+                    <p>Designer</p>
+                </div>
+            </div>
+
+            <div class="mentors-grid" style="display: flex; justify-content: center; flex-wrap: wrap; margin-top: 40px; gap: 40px; margin-bottom: 120px;">
+                <div class="member-card reveal" style="max-width: 400px; width: 100%;">
+                    <div class="member-img-box"><img src="maria.jpeg" alt="Mentor"></div>
+                    <h3>Iana Maria</h3>
+                    <p>Cadru Didactic</p>
+                </div>
+                <div class="member-card reveal" style="max-width: 400px; width: 100%;">
+                    <div class="member-img-box"><img src="marian.jpeg" alt="Mentor"></div>
+                    <h3>Dragnea Marian</h3>
+                    <p>Cadru Didactic</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="container reveal" style="margin-bottom: 120px;">
+            <div class="team-values">
+                <div class="texture-overlay"></div>
+                <div class="container" style="text-align: center;">
+                    <h2 style="font-size: 3rem; margin-bottom: 20px;">Ce ne definește echipa?</h2>
+                    <p style="opacity: 0.7; max-width: 700px; margin: 0 auto;">Dincolo de diplome, ne alegem colegii după 4 piloni fundamentali pe care nu îi negociem niciodată.</p>
+                    
+                    <div class="values-grid">
+                        <div class="value-item"><i>❤️</i><h4>Empatie</h4><p style="font-size: 0.9rem; opacity: 0.7; margin-top: 10px;">Înțelegem emoțiile copiilor înainte de a le preda lecțiile.</p></div>
+                        <div class="value-item"><i>📚</i><h4>Evoluție</h4><p style="font-size: 0.9rem; opacity: 0.7; margin-top: 10px;">Toți profesorii noștri urmează cursuri anuale de formare modernă.</p></div>
+                        <div class="value-item"><i>🛡️</i><h4>Integritate</h4><p style="font-size: 0.9rem; opacity: 0.7; margin-top: 10px;">Suntem modele de urmat în comportament și limbaj.</p></div>
+                        <div class="value-item"><i>✨</i><h4>Pasiune</h4><p style="font-size: 0.9rem; opacity: 0.7; margin-top: 10px;">Nu venim la „job”, venim să construim destine.</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo-box" style="color: white; margin-bottom: 30px;">
+                        <img src="logo.png" alt="ProKids" style="filter: brightness(0) invert(1);">
+                        <span>PROKIDS</span>
+                    </div>
+                    <p style="opacity: 0.6; line-height: 2; font-size: 0.95rem;">Excelență în educație extrașcolară și arte în Ploiești.</p>
+                    <div class="social-links">
+                        <a href="#" style="color:white">f</a>
+                        <a href="#" style="color:white">ig</a>
+                        <a href="#" style="color:white">tk</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Navigare Rapidă</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Acasă</a></li>
+                        <li><a href="preturi.html">Tarife</a></li>
+                        <li><a href="echipa.html">Echipa Noastră</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Programe</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">After School</a></li>
+                        <li><a href="#">Canto</a></li>
+                        <li><a href="#">Dans</a></li>
+                        <li><a href="#">Ateliere</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col contact-box">
+                    <h4>Contact Direct</h4>
+                    <p>📍 Strada Rudului 24, Ploiești</p>
+                    <p>📞 0244 542 341</p>
+                    <p>✉️ prokidsacademy25@gmail.com</p>
+                </div>
+            </div>
+            <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 40px; text-align: center; opacity: 0.4; font-size: 0.85rem;">
+                <p>© 2026 ProKids Academy. Toate drepturile rezervate.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Meniu Mobil logic
+        const mobileToggle = document.getElementById('mobile-toggle');
+        const navList = document.getElementById('nav-list');
+
+        mobileToggle.addEventListener('click', () => {
+            navList.classList.toggle('active');
+            // Animație simplă pentru iconiță
+            const spans = mobileToggle.querySelectorAll('span');
+            spans[0].style.transform = navList.classList.contains('active') ? 'rotate(45deg) translate(6px, 6px)' : 'none';
+            spans[1].style.opacity = navList.classList.contains('active') ? '0' : '1';
+            spans[2].style.transform = navList.classList.contains('active') ? 'rotate(-45deg) translate(7px, -7px)' : 'none';
+        });
+
+        // Reveal Animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
