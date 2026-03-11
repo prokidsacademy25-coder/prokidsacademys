@@ -104,16 +104,25 @@
     <div class="texture-overlay"></div>
     <div class="grid-bg"></div>
 
-    <header>
+   <header>
         <div class="container nav-flex">
             <a href="index.html" class="logo-box">
-                <img src="logo.png" alt="ProKids">
+                <img src="logo.png" alt="ProKids Logo">
                 <span>PROKIDS ACADEMY</span>
             </a>
-            <nav class="nav-menu">
+            
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <nav class="nav-menu" id="nav-menu">
                 <a href="index.html">Acasă</a>
-                <a href="scouting.html" style="color:var(--accent)">Scouting Hub</a>
-                <a href="contact.html" class="btn-cta-small">Înscrieri</a>
+                <a href="preturi.html">Tarife</a>
+                <a href="scouting.html" style="color: var(--accent);">Scouting ⚽</a>
+                <a href="echipa.html">Echipa</a>
+                <a href="contact.html" class="btn-cta">Înscrieri 2026</a>
             </nav>
         </div>
     </header>
@@ -348,4 +357,5 @@
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     </script>
 </body>
+
 </html>
